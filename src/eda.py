@@ -1,8 +1,9 @@
 import pandas as pd
 
-from data_loader import load_exoplanet_data
+from .data_loader import load_exoplanet_data
 
-def run_eda():
+
+def run_eda(data):
     data = load_exoplanet_data('data/kepler_data.csv')
     if data is None:
         return
@@ -18,6 +19,8 @@ def run_eda():
 
     print("\nSample data:")
     print(data.head())
+
+    return data
 
 if __name__ == "__main__":
     run_eda()
