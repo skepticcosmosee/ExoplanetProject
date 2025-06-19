@@ -9,8 +9,9 @@ from src.preprocess import preprocess_data
 
 def train_model(df):
     # Step 1: Choose features (X) and target (y)
-    X = df.drop(columns=['pl_bmasse'])  # drop target
-    y = (df['pl_bmasse'] > 2).astype(int)  # Binary classification: "massive" planet or not
+    X = df.drop(columns=['pl_bmasse','is_habitable'])  # drop target
+    y = ((df['pl_bmasse'] > 2)|(df['is_habitable']==1)).astype(int)  # Binary classification: "massive" planet or not
+    print("dsdsd")
 
     # Step 2: Train/test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -24,6 +25,7 @@ def train_model(df):
 
     print("Confusion Matrix:")
     print(confusion_matrix(y_test, y_pred,labels=[0,1]))
+
 
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))

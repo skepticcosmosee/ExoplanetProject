@@ -9,6 +9,15 @@ def preprocess_data(df):
     Returns the cleaned and transformed DataFrame.
     """
     df = df.copy()
+    # 5. Add Goldilocks Habitability Label
+    # Define habitability based on stellar temperature and orbital distance
+    temp_cond = (df['st_teff'] >= 4800) & (df['st_teff'] <= 6300)
+    orbit_cond = (df['pl_orbsmax'] >= 0.95) & (df['pl_orbsmax'] <= 1.37)
+    mass_cond = df['pl_bmasse'] > 2
+
+    df['is_habitable'] = (temp_cond & orbit_cond & mass_cond).astype(int)
+
+
 
     # 1. Drop rows with missing target values (if any)
     df.dropna(subset=['pl_bmasse', 'pl_rade'], inplace=True)
@@ -25,6 +34,8 @@ def preprocess_data(df):
     num_cols = df.select_dtypes(include=['float64', 'int64']).columns
     scaler = StandardScaler()
     df[num_cols] = scaler.fit_transform(df[num_cols])
+
+
 
     return df
 
